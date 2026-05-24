@@ -1,0 +1,8 @@
+{
+  "uuid": "smoothzoom@chappell.dev",
+  "name": "Smooth Zoom",
+  "description": "Per-monitor cursor-following zoom with hotkey control.",
+  "shell-version": ["50"],
+  "url": "https://github.com/kevinchappell/OBS-Smooth-Zoom",
+  "settings-schema": "org.gnome.shell.extensions.smoothzoom"
+}

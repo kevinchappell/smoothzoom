@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.smoothzoom"
+          path="/org/gnome/shell/extensions/smoothzoom/">
+    <key name="hotkey-zoom" type="as">
+      <default><![CDATA[['<Super>z']]]></default>
+      <summary>Toggle zoom</summary>
+    </key>
+    <key name="hotkey-follow" type="as">
+      <default><![CDATA[['<Super>x']]]></default>
+      <summary>Toggle follow (pause/resume while zoomed)</summary>
+    </key>
+  </schema>
+</schemalist>
