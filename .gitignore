@@ -1,2 +1,4 @@
 schemas/gschemas.compiled
 docs/
+.claude/
+.agents/

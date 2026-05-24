@@ -4,11 +4,7 @@ import Meta from 'gi://Meta';
 import Shell from 'gi://Shell';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-const ZOOM_SCALE = 2.0;
-const ZOOM_DURATION = 250;
 const FOLLOW_TICK_MS = 16;       // ~60Hz
-const FOLLOW_SMOOTHING = 0.18;   // 0..1 lerp factor per tick
-const FOLLOW_DEFAULT_ON = true;
 
 function monitorIndexForPoint(x, y) {
     const monitors = Main.layoutManager.monitors;
@@ -35,9 +31,10 @@ export class Zoomer {
         this._mon = null;       // {x,y,w,h} of active monitor
         this._pivotX = 0;
         this._pivotY = 0;
-        this._followEnabled = FOLLOW_DEFAULT_ON;
+        this._followEnabled = settings.get_boolean('follow-default-on');
         this._followTimer = 0;
         this._boundKeys = [];
+        this._settingsSignals = [];
     }
 
     enable() {
@@ -51,9 +48,32 @@ export class Zoomer {
         };
         add('hotkey-zoom', () => this.toggleZoom());
         add('hotkey-follow', () => this.toggleFollow());
+
+        // Rebind hotkeys live when the user changes them in prefs.
+        const rebind = (key, handler) => {
+            Main.wm.removeKeybinding(key);
+            Main.wm.addKeybinding(
+                key, this._settings,
+                Meta.KeyBindingFlags.NONE, modes,
+                handler);
+        };
+        this._settingsSignals.push(
+            this._settings.connect('changed::hotkey-zoom',
+                () => rebind('hotkey-zoom', () => this.toggleZoom())),
+            this._settings.connect('changed::hotkey-follow',
+                () => rebind('hotkey-follow', () => this.toggleFollow())),
+            this._settings.connect('changed::follow-default-on', () => {
+                // Only updates the default; doesn't flip an in-progress zoom.
+                if (this._state === 'IDLE')
+                    this._followEnabled = this._settings.get_boolean('follow-default-on');
+            }),
+        );
     }
 
     disable() {
+        for (const id of this._settingsSignals)
+            this._settings.disconnect(id);
+        this._settingsSignals = [];
         for (const key of this._boundKeys)
             Main.wm.removeKeybinding(key);
         this._boundKeys = [];
@@ -110,6 +130,12 @@ export class Zoomer {
             this._clone = null;
         }
 
+        // Snapshot animation params for this zoom cycle (changes mid-anim
+        // would yank the transition; smoothing is read live in _followTick).
+        const zoomScale = this._settings.get_double('zoom-level');
+        const zoomDuration = this._settings.get_int('zoom-duration-ms');
+        this._followEnabled = this._settings.get_boolean('follow-default-on');
+
         this._mon = {x: mon.x, y: mon.y, w: mon.width, h: mon.height};
 
         // Outer container: clips to monitor rect; never scales.
@@ -153,9 +179,9 @@ export class Zoomer {
 
         this._state = 'ZOOMING_IN';
         this._zoomActor.ease({
-            scale_x: ZOOM_SCALE,
-            scale_y: ZOOM_SCALE,
-            duration: ZOOM_DURATION,
+            scale_x: zoomScale,
+            scale_y: zoomScale,
+            duration: zoomDuration,
             mode: Clutter.AnimationMode.EASE_OUT_QUAD,
             onComplete: () => {
                 if (this._state === 'ZOOMING_IN') {
@@ -166,7 +192,7 @@ export class Zoomer {
             },
         });
 
-        console.log(`[smoothzoom] zoom-in mon=${monIdx} pivot=(${this._pivotX.toFixed(2)},${this._pivotY.toFixed(2)}) follow=${this._followEnabled ? 'on' : 'off'}`);
+        console.log(`[smoothzoom] zoom-in mon=${monIdx} scale=${zoomScale} dur=${zoomDuration} pivot=(${this._pivotX.toFixed(2)},${this._pivotY.toFixed(2)}) follow=${this._followEnabled ? 'on' : 'off'}`);
     }
 
     _zoomOut() {
@@ -175,11 +201,12 @@ export class Zoomer {
         this._state = 'ZOOMING_OUT';
         const container = this._container;
         const zoomActor = this._zoomActor;
+        const zoomDuration = this._settings.get_int('zoom-duration-ms');
         zoomActor.remove_all_transitions();
         zoomActor.ease({
             scale_x: 1.0,
             scale_y: 1.0,
-            duration: ZOOM_DURATION,
+            duration: zoomDuration,
             mode: Clutter.AnimationMode.EASE_OUT_QUAD,
             onComplete: () => {
                 if (this._container === container) {
@@ -217,11 +244,12 @@ export class Zoomer {
     _followTick() {
         if (!this._zoomActor || !this._mon)
             return;
+        const smoothing = this._settings.get_double('follow-smoothing');
         const [px, py] = global.get_pointer();
         const targetX = clamp01((px - this._mon.x) / this._mon.w);
         const targetY = clamp01((py - this._mon.y) / this._mon.h);
-        this._pivotX += (targetX - this._pivotX) * FOLLOW_SMOOTHING;
-        this._pivotY += (targetY - this._pivotY) * FOLLOW_SMOOTHING;
+        this._pivotX += (targetX - this._pivotX) * smoothing;
+        this._pivotY += (targetY - this._pivotY) * smoothing;
         this._zoomActor.set_pivot_point(this._pivotX, this._pivotY);
     }
 }

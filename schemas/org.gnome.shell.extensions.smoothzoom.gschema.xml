@@ -2,6 +2,29 @@
 <schemalist>
   <schema id="org.gnome.shell.extensions.smoothzoom"
           path="/org/gnome/shell/extensions/smoothzoom/">
+    <key name="zoom-level" type="d">
+      <default>2.0</default>
+      <range min="1.25" max="6.0"/>
+      <summary>Zoom level</summary>
+      <description>Magnification factor applied to the active monitor when zoomed in.</description>
+    </key>
+    <key name="zoom-duration-ms" type="i">
+      <default>250</default>
+      <range min="50" max="800"/>
+      <summary>Zoom animation duration (ms)</summary>
+      <description>Length of the zoom-in / zoom-out animation in milliseconds.</description>
+    </key>
+    <key name="follow-smoothing" type="d">
+      <default>0.18</default>
+      <range min="0.05" max="0.5"/>
+      <summary>Follow smoothing</summary>
+      <description>Lerp factor per 60Hz tick when following the cursor. Lower = smoother / laggier.</description>
+    </key>
+    <key name="follow-default-on" type="b">
+      <default>true</default>
+      <summary>Auto-start follow on zoom-in</summary>
+      <description>If true, follow starts automatically when zoom is toggled on.</description>
+    </key>
     <key name="hotkey-zoom" type="as">
       <default><![CDATA[['<Super>z']]]></default>
       <summary>Toggle zoom</summary>
