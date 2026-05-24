@@ -1,0 +1,37 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "node -e \"const f='metadata.json';const m=require('./'+f);m.version=(m.version||0)+1;require('fs').writeFileSync(f, JSON.stringify(m, null, 2)+'\\n');\" && make pack"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "package.json", "metadata.json"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "smoothzoom@kevinchappell.github.io.zip",
+            "label": "smoothzoom@kevinchappell.github.io.zip"
+          }
+        ]
+      }
+    ]
+  ]
+}

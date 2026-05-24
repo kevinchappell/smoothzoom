@@ -1,0 +1,4 @@
+commit-msg:
+  commands:
+    commitlint:
+      run: npx --no-install commitlint --edit {1}
