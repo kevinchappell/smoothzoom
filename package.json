@@ -1,0 +1,45 @@
+{
+  "name": "smoothzoom-gnome-extension",
+  "version": "1.0.0",
+  "description": "Smooth Zoom: per-monitor cursor-following zoom for GNOME Shell.",
+  "scripts": {
+    "ext:install": "./dev.sh install",
+    "reload": "./dev.sh reload",
+    "enable": "./dev.sh enable",
+    "disable": "./dev.sh disable",
+    "status": "./dev.sh status",
+    "watch": "./dev.sh watch",
+    "nested": "./dev.sh nested",
+    "test": "./dev.sh test",
+    "logs": "./dev.sh logs",
+    "uninstall": "./dev.sh uninstall",
+    "dev": "./dev.sh watch",
+    "start": "./dev.sh install",
+    "prepare": "lefthook install || true",
+    "commitlint": "commitlint --edit",
+    "release": "semantic-release"
+  },
+  "keywords": ["gnome", "gnome-shell", "extension", "zoom", "magnifier", "wayland"],
+  "author": "Kevin Chappell",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kevinchappell/smoothzoom.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kevinchappell/smoothzoom/issues"
+  },
+  "homepage": "https://github.com/kevinchappell/smoothzoom#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.0",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.0",
+    "@semantic-release/release-notes-generator": "^14.0.0",
+    "lefthook": "^1.7.18",
+    "semantic-release": "^24.1.2"
+  }
+}

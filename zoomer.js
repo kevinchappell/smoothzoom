@@ -108,17 +108,14 @@ export class Zoomer {
             this._startFollow();
         else
             this._stopFollow();
-        console.log(`[smoothzoom] follow=${this._followEnabled ? 'on' : 'off'}`);
     }
 
     _zoomIn() {
         const [px, py] = global.get_pointer();
         const monIdx = monitorIndexForPoint(px, py);
         const mon = Main.layoutManager.monitors[monIdx];
-        if (!mon) {
-            console.log(`[smoothzoom] no monitor at (${px},${py})`);
+        if (!mon)
             return;
-        }
 
         if (this._container) {
             this._stopFollow();
@@ -191,8 +188,6 @@ export class Zoomer {
                 }
             },
         });
-
-        console.log(`[smoothzoom] zoom-in mon=${monIdx} scale=${zoomScale} dur=${zoomDuration} pivot=(${this._pivotX.toFixed(2)},${this._pivotY.toFixed(2)}) follow=${this._followEnabled ? 'on' : 'off'}`);
     }
 
     _zoomOut() {
@@ -219,7 +214,6 @@ export class Zoomer {
                 }
             },
         });
-        console.log('[smoothzoom] zoom-out');
     }
 
     _startFollow() {
