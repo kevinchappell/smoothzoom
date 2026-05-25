@@ -3,3 +3,4 @@ docs/
 .claude/
 .agents/
 node_modules/
+*.zip

@@ -37,17 +37,28 @@ logs:
 schemas:
 	glib-compile-schemas schemas/
 
-pack: schemas
+pack:
+	@# Build a zip suitable for upload to https://extensions.gnome.org/upload/.
+	@# EGO compiles GSettings schemas server-side, so gschemas.compiled is
+	@# intentionally NOT included — only the source XML is shipped. All
+	@# files must sit at the zip root (no parent directory), which `zip`
+	@# already does when invoked from the extension directory.
 	@rm -f $(UUID).zip
-	@zip -r $(UUID).zip \
+	@# Validate schema XML before packaging.
+	@if command -v xmllint >/dev/null 2>&1; then \
+		xmllint --noout schemas/org.gnome.shell.extensions.smoothzoom.gschema.xml \
+			|| { echo "Schema XML failed validation"; exit 1; }; \
+	fi
+	@zip -q $(UUID).zip \
+		metadata.json \
 		extension.js \
 		zoomer.js \
 		prefs.js \
-		metadata.json \
 		schemas/org.gnome.shell.extensions.smoothzoom.gschema.xml \
-		schemas/gschemas.compiled \
 		README.md \
-		$$( [ -f LICENSE ] && echo LICENSE )
+		LICENSE
+	@echo "Built $(UUID).zip:"
+	@unzip -l $(UUID).zip
 
 # Cleanup targets
 uninstall:
