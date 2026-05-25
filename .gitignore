@@ -2,3 +2,4 @@ schemas/gschemas.compiled
 docs/
 .claude/
 .agents/
+node_modules/
