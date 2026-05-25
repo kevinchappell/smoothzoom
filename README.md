@@ -33,12 +33,11 @@ Both are reassignable in the preferences panel.
 ## Install (from source)
 
 ```bash
-# From the repo root containing the smoothzoom@kevinchappell.github.io/ directory
-ln -s "$PWD/smoothzoom@kevinchappell.github.io" \
-      "$HOME/.local/share/gnome-shell/extensions/smoothzoom@kevinchappell.github.io"
+# Build a distributable zip from the repo root
+make pack
 
-# Compile the gsettings schema
-glib-compile-schemas smoothzoom@kevinchappell.github.io/schemas/
+# Install it the GNOME way
+gnome-extensions install --force smoothzoom@kevinchappell.github.io.zip
 
 # Log out and back in (Wayland needs a fresh shell process to load a new extension)
 
@@ -73,29 +72,21 @@ The extension is structured to allow fast iteration without a Wayland logout:
 
 ```
 smoothzoom@kevinchappell.github.io/
-├── extension.js        # Thin shim — cache-busts and dynamic-imports zoomer.js
-├── zoomer.js           # All real logic; reload-friendly
+├── extension.js        # Entry point — wires zoomer.js into the extension lifecycle
+├── zoomer.js           # All real logic
 ├── prefs.js            # libadwaita preferences UI
 ├── metadata.json
 └── schemas/
     └── org.gnome.shell.extensions.smoothzoom.gschema.xml
 ```
 
-GNOME Shell caches ESM modules for the process lifetime. `extension.js` works around this by dynamic-importing `zoomer.js?v=${Date.now()}`, so a disable/enable cycle picks up edits to `zoomer.js` without restarting the shell.
-
 ### Iteration loop
 
 ```bash
-# After editing zoomer.js or the schema:
+# After editing any source file or the schema:
 glib-compile-schemas smoothzoom@kevinchappell.github.io/schemas/   # only on schema changes
-gnome-extensions disable smoothzoom@kevinchappell.github.io
-gnome-extensions enable smoothzoom@kevinchappell.github.io
-
-# Watch shell logs in another terminal:
-journalctl /usr/bin/gnome-shell -f
+# Then log out / log back in to pick up changes (GNOME Shell caches ESM modules for the process lifetime).
 ```
-
-Editing `extension.js` itself, `prefs.js`, or `metadata.json` still requires a logout/login to pick up.
 
 ### Architecture notes
 
