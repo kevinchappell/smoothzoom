@@ -2,9 +2,13 @@
 
 A GNOME Shell 50 extension that smoothly zooms into the monitor your cursor is on, follows the cursor while zoomed, and gets out of the way of everything else on screen.
 
+[smoothzoom_720.webm](https://github.com/user-attachments/assets/f61ffe7a-f8a5-4a54-9371-c44e06d3cb93)
+
+
 Built for live demos, screen-sharing, and recording — so OBS (or whatever's capturing the screen) can stay a passive recorder while the zoom happens at the compositor level.
 
 ## Features
+
 
 - **Per-monitor zoom.** Only the monitor containing the cursor at toggle time is scaled. Other monitors (preview, chat, notes) stay at 1×.
 - **Smooth animation.** Configurable ease-out duration (default 250 ms).
