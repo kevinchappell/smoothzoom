@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/kevinchappell/smoothzoom/compare/v1.0.1...v1.0.2) (2026-05-25)
+
+
+### Bug Fixes
+
+* remove dynamic import to pass shexli ([e8f013a](https://github.com/kevinchappell/smoothzoom/commit/e8f013aafc617c4d63b367fe896c65698d9942bd))
+
 ## [1.0.1](https://github.com/kevinchappell/smoothzoom/compare/v1.0.0...v1.0.1) (2026-05-25)
 
 
