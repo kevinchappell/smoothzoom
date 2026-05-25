@@ -7,5 +7,5 @@
   ],
   "url": "https://github.com/kevinchappell/smoothzoom",
   "settings-schema": "org.gnome.shell.extensions.smoothzoom",
-  "version": 1
+  "version": 2
 }
