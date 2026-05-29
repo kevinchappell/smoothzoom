@@ -3,6 +3,11 @@
   "name": "Smooth Zoom",
   "description": "Per-monitor cursor-following zoom with hotkey control.",
   "shell-version": [
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
     "50"
   ],
   "url": "https://github.com/kevinchappell/smoothzoom",
