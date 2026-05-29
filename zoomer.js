@@ -34,7 +34,6 @@ export class Zoomer {
         this._followEnabled = settings.get_boolean('follow-default-on');
         this._followTimer = 0;
         this._boundKeys = [];
-        this._settingsSignals = [];
     }
 
     enable() {
@@ -57,23 +56,21 @@ export class Zoomer {
                 Meta.KeyBindingFlags.NONE, modes,
                 handler);
         };
-        this._settingsSignals.push(
-            this._settings.connect('changed::hotkey-zoom',
-                () => rebind('hotkey-zoom', () => this.toggleZoom())),
-            this._settings.connect('changed::hotkey-follow',
-                () => rebind('hotkey-follow', () => this.toggleFollow())),
-            this._settings.connect('changed::follow-default-on', () => {
+        this._settings.connectObject(
+            'changed::hotkey-zoom',
+            () => rebind('hotkey-zoom', () => this.toggleZoom()),
+            'changed::hotkey-follow',
+            () => rebind('hotkey-follow', () => this.toggleFollow()),
+            'changed::follow-default-on', () => {
                 // Only updates the default; doesn't flip an in-progress zoom.
                 if (this._state === 'IDLE')
                     this._followEnabled = this._settings.get_boolean('follow-default-on');
-            }),
-        );
+            },
+            this);
     }
 
     disable() {
-        for (const id of this._settingsSignals)
-            this._settings.disconnect(id);
-        this._settingsSignals = [];
+        this._settings.disconnectObject(this);
         for (const key of this._boundKeys)
             Main.wm.removeKeybinding(key);
         this._boundKeys = [];

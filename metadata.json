@@ -7,5 +7,13 @@
   ],
   "url": "https://github.com/kevinchappell/smoothzoom",
   "settings-schema": "org.gnome.shell.extensions.smoothzoom",
-  "version": 3
+  "version": 3,
+  "donations": {
+    "buymeacoffee": "kevinchappell",
+    "github": "kevinchappell",
+    "paypal": "KevinChappellDev",
+    "custom": [
+      "https://buy.polar.sh/polar_cl_Y6ksGYGvc9KcATNjGAEVK1rTGh5VKBBQbfysb31K6DI"
+    ]
+  }
 }
