@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/kevinchappell/smoothzoom/compare/v1.0.2...v1.0.3) (2026-05-30)
+
+
+### Bug Fixes
+
+* use connectObject and disconnectObject ([1e35331](https://github.com/kevinchappell/smoothzoom/commit/1e35331a5195c5c1e1114756fbb701c70009a2fc))
+
 ## [1.0.2](https://github.com/kevinchappell/smoothzoom/compare/v1.0.1...v1.0.2) (2026-05-25)
 
 

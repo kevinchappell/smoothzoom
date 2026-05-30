@@ -12,7 +12,7 @@
   ],
   "url": "https://github.com/kevinchappell/smoothzoom",
   "settings-schema": "org.gnome.shell.extensions.smoothzoom",
-  "version": 3,
+  "version": 4,
   "donations": {
     "buymeacoffee": "kevinchappell",
     "github": "kevinchappell",
